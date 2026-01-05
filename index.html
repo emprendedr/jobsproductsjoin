@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aiviraljobs - Tu Sistema de Automatización con IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Todos los estilos CSS anteriores se mantienen igual */
+        /* ... (todo el CSS anterior permanece igual) ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Todo el contenido HTML anterior se mantiene igual -->
+        <!-- ... (todo el HTML anterior permanece igual) ... -->
+    </div>
+
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" id="chatbotIcon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+            <path d="M7 9h10v2H7zm0 4h7v2H7z"/>
+        </svg>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#40e0d0">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+                    <path d="M7 9h10v2H7zm0 4h7v2H7z"/>
+                </svg>
+                Asistente Emily - AI Viral Downline
+            </div>
+            <button class="chatbot-close" id="chatbotClose">&times;</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <!-- Mensajes aparecerán aquí -->
+        </div>
+        <div class="quick-replies">
+            <button class="quick-reply" data-reply="¿Qué es AI Viral Downline?">¿Qué es?</button>
+            <button class="quick-reply" data-reply="¿Cuánto cuesta?">Precio</button>
+            <button class="quick-reply" data-reply="¿Cómo empiezo?">Comenzar</button>
+            <button class="quick-reply" data-reply="¿Qué es la matriz 3x8?">Matriz 3x8</button>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Escribe tu pregunta aquí..." autocomplete="off">
+            <button id="chatbotSend">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="cta-buttons" id="ctaButtons" style="display: none;">
+            <!-- Botones dinámicos aparecerán aquí -->
+        </div>
+    </div>
+
+    <script>
+        // Chatbot Variables
+        const chatbotIcon = document.getElementById('chatbotIcon');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSend = document.getElementById('chatbotSend');
+        const quickReplyButtons = document.querySelectorAll('.quick-reply');
+        const ctaButtons = document.getElementById('ctaButtons');
+
+        // Base de conocimiento MEJORADA con VARIACIONES de preguntas
+        const knowledgeBase = {
+            // CATEGORÍA 1: QUÉ ES AI VIRAL DOWNLINE
+            "que_es": {
+                answer: "¡Hola! Soy Emily, tu asistente de IA. AI Viral Downline es una plataforma de automatización con inteligencia artificial diseñada para ayudarte a promocionar oportunidades digitales, atraer prospectos y generar ingresos residuales mediante un sistema de referidos y matriz de compensación. ¿Listo para comenzar tu prueba gratuita de 7 días hoy mismo?",
+                variations: [
+                    "qué es ai viral downline",
+                    "que es aiviraldownline",
+                    "explica qué es esto",
+                    "de qué se trata",
+                    "qué es este sistema",
+                    "qué hace ai viral downline",
+                    "qué es esta plataforma",
+                    "cómo funciona ai viral downline",
+                    "qué significa ai viral downline",
+                    "qué ofrece ai viral downline"
+                ],
+                category: "concepto"
+            },
+            
+            "quien_puede_usar": {
+                answer: "Cualquier persona mayor de 18 años puede usar AI Viral Downline. No necesitas experiencia previa en marketing, creación de contenido ni ventas. Solo debes estar dispuesto a aprender a usar la IA de forma inteligente. ¡El momento perfecto para empezar es hoy!",
+                variations: [
+                    "quién puede usar",
+                    "quien puede usar",
+                    "puedo usar yo",
+                    "requisitos para usar",
+                    "edad mínima",
+                    "necesito experiencia",
+                    "puede cualquiera usar",
+                    "requisitos de edad",
+                    "quién se puede unir",
+                    "pueden usar menores"
+                ],
+                category: "requisitos"
+            },
+            
+            "conocimientos_tecnicos": {
+                answer: "¡Para nada! La plataforma está diseñada para ser intuitiva. Incluye tutoriales paso a paso y yo, Emily, te guío en todo el proceso. ¡Es más fácil de lo que imaginas!",
+                variations: [
+                    "necesito conocimientos técnicos",
+                    "requiere saber de tecnología",
+                    "es difícil de usar",
+                    "necesito saber programar",
+                    "es complicado",
+                    "fácil de usar",
+                    "intuitivo",
+                    "necesito experiencia técnica",
+                    "puedo aprender rápido",
+                    "es para técnicos"
+                ],
+                category: "facilidad"
+            },
+            
+            "que_hace_emily": {
+                answer: "¡Esa soy yo! Soy una IA que explica la línea descendente viral, desglosa la matriz 3x8, supera objeciones comunes y guía a los prospectos en el proceso de registro automático. Estoy aquí para hacerte la vida más fácil.",
+                variations: [
+                    "qué hace emily",
+                    "que hace emily",
+                    "para qué sirve emily",
+                    "quién es emily",
+                    "emily qué hace",
+                    "la ia emily",
+                    "asistente emily",
+                    "emily ayuda",
+                    "qué puede hacer emily",
+                    "emily funciones"
+                ],
+                category: "emily"
+            },
+            
+            "es_legal": {
+                answer: "¡Absolutamente sí! AI Viral Downline es un sistema de marketing de afiliación legítimo con productos y servicios reales. Ofrece valor a través de automatización con IA y genera ingresos a través de referencias y una estructura de compensación transparente. ¡Comienza tu prueba gratuita hoy y compruébalo tú mismo!",
+                variations: [
+                    "esquema piramidal",
+                    "es legal",
+                    "es estafa",
+                    "es confiable",
+                    "es seguro",
+                    "no es piramidal",
+                    "es legal en mi país",
+                    "es fraude",
+                    "es serio",
+                    "tiene respaldo legal"
+                ],
+                category: "legalidad"
+            },
+
+            // CATEGORÍA 2: COSTOS Y PAGOS
+            "costo": {
+                answer: "¡Excelente pregunta! Ofrecemos una prueba GRATUITA de 7 días sin compromiso. Después del período de prueba, la membresía tiene un costo de $28 al mes. ¡Pero empieza GRATIS hoy mismo!",
+                variations: [
+                    "cuánto cuesta",
+                    "cuanto cuesta",
+                    "precio",
+                    "costo",
+                    "28 dólares",
+                    "valor",
+                    "tarifa",
+                    "mensualidad",
+                    "cuota",
+                    "inversión inicial",
+                    "qué cuesta",
+                    "es gratis",
+                    "tiene costo",
+                    "hay que pagar"
+                ],
+                category: "costos"
+            },
+            
+            "tarjeta_credito": {
+                answer: "No, no necesitas tarjeta de crédito para comenzar la prueba gratuita de 7 días. ¡Completamente libre de riesgo!",
+                variations: [
+                    "tarjeta crédito prueba",
+                    "necesito tarjeta",
+                    "tarjeta de crédito",
+                    "sin tarjeta",
+                    "pago con tarjeta",
+                    "métodos de pago",
+                    "cómo pagar",
+                    "requiere tarjeta",
+                    "prueba sin tarjeta",
+                    "tarjeta necesaria"
+                ],
+                category: "costos"
+            },
+            
+            "ganar_por_referido": {
+                answer: "¡Directo al grano! Ganas $25 por cada referencia directa que se une a través de tu enlace y completa el proceso de registro. ¡Eso es ingreso inmediato!",
+                variations: [
+                    "ganar por referido",
+                    "25 por referido",
+                    "comisión por referido",
+                    "cuánto gano por referir",
+                    "ganancias por referidos",
+                    "pago por referido",
+                    "referidos ganancias",
+                    "cuánto pagan por referido",
+                    "ganar dinero referidos",
+                    "comisiones"
+                ],
+                category: "ganancias"
+            },
+
+            // CATEGORÍA 3: LA MATRIZ 3X8
+            "matriz_3x8": {
+                answer: "¡El corazón del sistema! Es una estructura de compensación donde cada persona puede tener hasta 3 personas en su primer nivel, y estas a su vez pueden tener 3 cada una, expandiéndose hasta 8 niveles de profundidad. ¡Potencial de ingresos masivo!",
+                variations: [
+                    "matriz 3x8",
+                    "qué es la matriz",
+                    "matriz de compensación",
+                    "sistema 3x8",
+                    "estructura 3x8",
+                    "cómo funciona la matriz",
+                    "matriz viral",
+                    "8 niveles",
+                    "tres por ocho",
+                    "explica la matriz"
+                ],
+                category: "matriz"
+            },
+            
+            "ganancias_matriz": {
+                answer: "¡Prepárate para esto! Con la matriz completa (8 niveles) puedes ganar hasta $26,265 mensuales. Los niveles 1-7 pueden generarte hasta $6,582/mes sin necesidad de referir personalmente a nadie. ¡Impresionante, verdad?",
+                variations: [
+                    "ganar matriz completa",
+                    "26265 mensuales",
+                    "6582 mensuales",
+                    "cuánto puedo ganar",
+                    "ganancias potenciales",
+                    "ingresos mensuales",
+                    "máximo ganar",
+                    "potencial de ingresos",
+                    "cuánto se gana",
+                    "ganancias reales"
+                ],
+                category: "ganancias"
+            },
+
+            // CATEGORÍA 4: INICIO
+            "como_empezar": {
+                answer: "¡Acción inmediata! Si tienes $28, activa tu membresía hoy mismo y comienza a generar ingresos. Si no tienes $28, usa la prueba gratuita de 7 días, pero haz el upgrade lo antes posible para no perder tu posición. ¡Los primeros dominan el mercado!",
+                variations: [
+                    "cómo empiezo",
+                    "como empiezo",
+                    "cómo comenzar",
+                    "primeros pasos",
+                    "cómo me uno",
+                    "quiero empezar",
+                    "cómo inicio",
+                    "paso a paso",
+                    "cómo registrarme",
+                    "cómo participar"
+                ],
+                category: "inicio"
+            },
+            
+            "tengo_dinero": {
+                answer: "¡Excelente decisión! Asegura tu posición hoy con $28 y comienza a generar ingresos de inmediato. Los primeros en entrar tienen ventaja competitiva. ¡Haz clic aquí para activar ahora mismo!",
+                variations: [
+                    "tengo 28",
+                    "tengo $28",
+                    "tengo el dinero",
+                    "listo para pagar",
+                    "quiero pagar ahora",
+                    "tengo los 28 dólares",
+                    "puedo pagar",
+                    "quiero activar",
+                    "tengo para pagar",
+                    "dispongo del dinero"
+                ],
+                category: "inicio"
+            },
+            
+            "no_tengo_dinero": {
+                answer: "¡No hay problema! Comienza con la prueba gratuita de 7 días: acceso completo, gana $25 por cada referido y experimenta el sistema. Pero haz tu upgrade a $28 lo antes posible para no perder tu posición en la matriz. ¡Actúa hoy!",
+                variations: [
+                    "no tengo 28",
+                    "no tengo $28",
+                    "no tengo dinero",
+                    "no puedo pagar ahora",
+                    "sin dinero",
+                    "prueba gratis primero",
+                    "empezar gratis",
+                    "sin pagar",
+                    "no cuento con dinero",
+                    "quiero probar gratis"
+                ],
+                category: "inicio"
+            },
+
+            // RESPUESTA POR DEFECTO
+            "default": {
+                answer: "¡Entiendo tu pregunta! Parece que es algo muy específico o tal vez no tengo suficiente información en mi base de datos para darte la respuesta exacta que necesitas. Te recomiendo contactar directamente a Jobs, tu patrocinador, por WhatsApp para obtener una respuesta personalizada y detallada. ¿Te ayudo a conectarte con él?",
+                variations: [],
+                category: "no_encontrado"
+            }
+        };
+
+        // Estado inicial
+        let initialMessageShown = false;
+
+        // Función para mostrar/ocultar chatbot
+        chatbotIcon.addEventListener('click', function() {
+            chatbotContainer.style.display = 'flex';
+            chatbotIcon.style.display = 'none';
+            
+            if (!initialMessageShown) {
+                setTimeout(() => {
+                    addBotMessage("¡Hola! Soy Emily, tu asistente de IA para AI Viral Downline. 🤖 Estoy aquí para responder todas tus preguntas sobre nuestro sistema de automatización con inteligencia artificial, la matriz 3x8 de ingresos residuales, y cómo puedes comenzar tu prueba gratuita de 7 días hoy mismo. ¿En qué puedo ayudarte?");
+                    initialMessageShown = true;
+                }, 300);
+            }
+        });
+
+        chatbotClose.addEventListener('click', function() {
+            chatbotContainer.style.display = 'none';
+            chatbotIcon.style.display = 'flex';
+        });
+
+        // Función para agregar mensaje del usuario
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            messageDiv.textContent = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        // Función para agregar mensaje del bot
+        function addBotMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            
+            // Formatear texto con markdown básico
+            let formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            
+            messageDiv.innerHTML = formattedText;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        // ============================================
+        // MEJORA CLAVE: ALGORITMO DE SIMILITUD MEJORADO
+        // ============================================
+
+        // Función para normalizar texto (eliminar acentos, minúsculas, etc.)
+        function normalizeText(text) {
+            return text.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // elimina acentos
+                .replace(/[¿?¡!.,;:]/g, "") // elimina signos de puntuación
+                .replace(/\s+/g, ' ') // normaliza espacios
+                .trim();
+        }
+
+        // Función para tokenizar texto (separar en palabras)
+        function tokenize(text) {
+            return text.split(/\s+/).filter(word => word.length > 2);
+        }
+
+        // Función para calcular similitud entre dos textos (0 a 1)
+        function calculateSimilarity(text1, text2) {
+            const normalized1 = normalizeText(text1);
+            const normalized2 = normalizeText(text2);
+            
+            // Si hay coincidencia exacta después de normalizar
+            if (normalized1 === normalized2) return 1.0;
+            
+            const tokens1 = tokenize(normalized1);
+            const tokens2 = tokenize(normalized2);
+            
+            // Si uno de los textos está vacío
+            if (tokens1.length === 0 || tokens2.length === 0) return 0;
+            
+            // Calcular intersección de tokens
+            const set1 = new Set(tokens1);
+            const set2 = new Set(tokens2);
+            const intersection = [...set1].filter(x => set2.has(x)).length;
+            
+            // Calcular unión de tokens
+            const union = new Set([...tokens1, ...tokens2]).size;
+            
+            // Coeficiente de Jaccard
+            const jaccard = intersection / union;
+            
+            // Verificar si hay palabras clave importantes
+            const importantKeywords = [
+                'ai', 'viral', 'downline', 'emily', 'matriz', '3x8', 
+                '28', 'dólares', 'ganar', 'dinero', 'ingresos', 'referidos',
+                'prueba', 'gratis', 'gratuita', '7', 'días'
+            ];
+            
+            let keywordBonus = 0;
+            importantKeywords.forEach(keyword => {
+                if (normalized1.includes(keyword) && normalized2.includes(keyword)) {
+                    keywordBonus += 0.1;
+                }
+            });
+            
+            // Verificar si hay palabras similares (con errores de escritura)
+            let similarityBonus = 0;
+            tokens1.forEach(token1 => {
+                tokens2.forEach(token2 => {
+                    if (token1.length > 3 && token2.length > 3) {
+                        // Distancia de Levenshtein simple
+                        const maxLength = Math.max(token1.length, token2.length);
+                        let distance = 0;
+                        for (let i = 0; i < maxLength; i++) {
+                            if (token1[i] !== token2[i]) distance++;
+                        }
+                        const similarity = 1 - (distance / maxLength);
+                        if (similarity > 0.7) {
+                            similarityBonus += 0.05;
+                        }
+                    }
+                });
+            });
+            
+            return Math.min(1.0, jaccard + keywordBonus + similarityBonus);
+        }
+
+        // Función MEJORADA para encontrar la mejor respuesta
+        function findBestAnswer(userQuestion) {
+            let bestMatch = null;
+            let highestSimilarity = 0;
+            const normalizedQuestion = normalizeText(userQuestion);
+            
+            // Primero, verificar variaciones directas
+            for (const [key, data] of Object.entries(knowledgeBase)) {
+                if (key === "default") continue;
+                
+                // Verificar cada variación
+                for (const variation of data.variations) {
+                    const similarity = calculateSimilarity(normalizedQuestion, variation);
+                    if (similarity > highestSimilarity) {
+                        highestSimilarity = similarity;
+                        bestMatch = key;
+                    }
+                }
+                
+                // También verificar la respuesta misma (por si contiene palabras clave)
+                const answerSimilarity = calculateSimilarity(normalizedQuestion, data.answer);
+                if (answerSimilarity > highestSimilarity) {
+                    highestSimilarity = answerSimilarity;
+                    bestMatch = key;
+                }
+            }
+            
+            console.log("Pregunta:", userQuestion, "| Mejor match:", bestMatch, "| Similitud:", highestSimilarity);
+            
+            // Si la similitud es muy baja, usar respuesta por defecto
+            if (highestSimilarity < 0.3) {
+                return {
+                    key: "default",
+                    data: knowledgeBase.default,
+                    similarity: highestSimilarity
+                };
+            }
+            
+            return {
+                key: bestMatch,
+                data: knowledgeBase[bestMatch],
+                similarity: highestSimilarity
+            };
+        }
+
+        // Función para determinar qué botones mostrar
+        function determineButtons(category, questionKey, similarity) {
+            let buttonsHTML = '';
+            
+            // Si la similitud es baja o es pregunta no encontrada
+            if (similarity < 0.3 || questionKey === "default") {
+                buttonsHTML = `
+                    <a href="https://wa.me/13232850508?text=Hola%20jobs,%20tengo%20esta%20pregunta:%20${encodeURIComponent(chatbotInput.value)}%20¿Me%20puedes%20ayudar?" 
+                       class="whatsapp-cta-button" target="_blank">
+                        📱 Hablar con Patrocinador (Pregunta Específica)
+                    </a>
+                    <a href="https://t.me/+EnM9LTD6JlgzMjcx" class="cta-button" style="background: linear-gradient(90deg, #0088cc, #006699);" target="_blank">
+                        📱 Únete a Nuestra Comunidad
+                    </a>
+                `;
+            }
+            // Si es pregunta sobre inicio o costo
+            else if (category === "inicio" || category === "costos" || questionKey.includes("tengo") || questionKey.includes("dinero")) {
+                buttonsHTML = `
+                    <a href="https://aiviraldownline.com/lc.php?id=Jobshndez" class="cta-button" target="_blank">
+                        ¡Inicia Prueba Gratuita de 7 Días!
+                    </a>
+                    <a href="https://wa.me/13232850508?text=Hola%20jobs,%20necesito%20ayuda%20para%20dar%20inicio%20con%20Aiviraldownline.%20Me%20das%20el%20paso%20a%20paso?" 
+                       class="whatsapp-cta-button" target="_blank">
+                        📱 Soporte Personalizado
+                    </a>
+                `;
+            }
+            // Si es pregunta sobre ganancias
+            else if (category === "ganancias") {
+                buttonsHTML = `
+                    <a href="https://aiviraldownline.com/lc.php?id=Jobshndez" class="cta-button" target="_blank">
+                        ¡Comienza a Generar Ingresos Hoy!
+                    </a>
+                `;
+            }
+            // Para otras categorías
+            else {
+                buttonsHTML = `
+                    <a href="https://aiviraldownline.com/lc.php?id=Jobshndez" class="cta-button" target="_blank">
+                        ¡Únete Ahora! Prueba 7 Días Gratis
+                    </a>
+                    <a href="https://t.me/+EnM9LTD6JlgzMjcx" class="cta-button" style="background: linear-gradient(90deg, #0088cc, #006699);" target="_blank">
+                        📱 Únete a Nuestra Comunidad
+                    </a>
+                `;
+            }
+            
+            return buttonsHTML;
+        }
+
+        // Función para procesar mensaje
+        function processMessage(message) {
+            // Encontrar la mejor respuesta usando el algoritmo mejorado
+            const bestAnswer = findBestAnswer(message);
+            
+            // MOSTRAR RESPUESTA
+            setTimeout(() => {
+                addBotMessage(bestAnswer.data.answer);
+                
+                // Mostrar botones CTA según corresponda
+                setTimeout(() => {
+                    const buttonsHTML = determineButtons(bestAnswer.data.category, bestAnswer.key, bestAnswer.similarity);
+                    ctaButtons.innerHTML = buttonsHTML;
+                    ctaButtons.style.display = 'flex';
+                }, 500);
+            }, 800);
+        }
+
+        // Función para enviar mensaje
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (message === '') return;
+            
+            // Agregar mensaje del usuario
+            addUserMessage(message);
+            chatbotInput.value = '';
+            
+            // Mostrar indicador de "pensando"
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message bot-message';
+            typingIndicator.innerHTML = '<em>Analizando tu pregunta... 🤔</em>';
+            chatbotMessages.appendChild(typingIndicator);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            
+            // Procesar mensaje después de un breve retraso
+            setTimeout(() => {
+                chatbotMessages.removeChild(typingIndicator);
+                processMessage(message);
+            }, 1000);
+        }
+
+        // Event listeners para enviar mensaje
+        chatbotSend.addEventListener('click', sendMessage);
+        
+        chatbotInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Event listeners para respuestas rápidas
+        quickReplyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const reply = this.getAttribute('data-reply');
+                chatbotInput.value = reply;
+                sendMessage();
+            });
+        });
+
+        // Auto-abrir chatbot después de 5 segundos
+        setTimeout(() => {
+            if (!initialMessageShown) {
+                chatbotIcon.style.animation = 'pulse 2s infinite';
+            }
+        }, 5000);
+
+        // Auto-abrir en móviles después de 10 segundos
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                if (!initialMessageShown) {
+                    chatbotIcon.click();
+                }
+            }, 10000);
+        }
+
+        // Código JavaScript para animaciones de imágenes (se mantiene igual)
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.money-image');
+            const imagesContainer = document.getElementById('imagesContainer');
+            
+            // Animación de entrada para las imágenes con efecto escalonado
+            function animateImages() {
+                images.forEach((image, index) => {
+                    setTimeout(() => {
+                        image.classList.add('visible');
+                    }, index * 400);
+                });
+            }
+            
+            // Observador de intersección
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateImages();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { 
+                threshold: 0.2,
+                rootMargin: '0px 0px -100px 0px'
+            });
+            
+            // Observar el contenedor de imágenes
+            if (imagesContainer) {
+                observer.observe(imagesContainer);
+            }
+            
+            // Efecto de conteo animado
+            const countElement = document.querySelector('.count-animation');
+            if (countElement) {
+                let count = 0;
+                const target = 25;
+                const duration = 1500;
+                const increment = target / (duration / 16);
+                
+                const updateCount = () => {
+                    if (count < target) {
+                        count += increment;
+                        if (count > target) count = target;
+                        countElement.textContent = `$${Math.round(count)}`;
+                        requestAnimationFrame(updateCount);
+                    }
+                };
+                
+                // Iniciar animación cuando la sección sea visible
+                const countObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCount();
+                            countObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                
+                countObserver.observe(countElement);
+            }
+        });
+    </script>
+</body>
+</html>
